@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from hf_chatbot import hf_reply
 from logic import track_order
+import os
 
 app = Flask(__name__)
 
@@ -25,4 +26,5 @@ def webhook():
     return jsonify({"fulfillmentText": reply})
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
