@@ -14,13 +14,16 @@ TELEGRAM_API = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
 
 @app.route("/telegram", methods=["POST"])
 def telegram_webhook():
+    print("Telegram webhook starts to run")
     data = request.get_json()
+    print(f"Telegram chat data: {data}")
 
     if "message" in data:
         chat_id = data["message"]["chat"]["id"]
         user_text = data["message"].get("text", "")
 
         reply = hf_reply(user_text)
+        print(f"Reply form hf_reply: {reply}")
 
         requests.post(
             f"{TELEGRAM_API}/sendMessage",
@@ -34,7 +37,9 @@ def telegram_webhook():
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
+    print("Starting webhook")
     data = request.get_json()
+    print(f"Data from dialogflow: {data}")
     query_result = data.get("queryResult", {})
     action = query_result.get("action", "")
     params = query_result.get("parameters", {})
