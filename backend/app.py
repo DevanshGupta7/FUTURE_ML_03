@@ -2,15 +2,43 @@ from flask import Flask, request, jsonify
 from hf_chatbot import hf_reply
 from logic import track_order
 import os
+import requests
 
 app = Flask(__name__)
+
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_API = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
+
+if not TELEGRAM_TOKEN:
+    raise RuntimeError("TELEGRAM_BOT_TOKEN is not set")
+
+@app.route("/telegram", methods=["POST"])
+def telegram_webhook():
+    data = request.get_json()
+
+    if "message" in data:
+        chat_id = data["message"]["chat"]["id"]
+        user_text = data["message"].get("text", "")
+
+        reply = hf_reply(user_text)
+
+        requests.post(
+            f"{TELEGRAM_API}/sendMessage",
+            json={
+                "chat_id": chat_id,
+                "text": reply
+            }
+        )
+
+    return "OK", 200
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.get_json()
-    action = data["queryResult"].get("action")
-    params = data["queryResult"].get("parameters")
-    user_text = data["queryResult"]["queryText"]
+    query_result = data.get("queryResult", {})
+    action = query_result.get("action", "")
+    params = query_result.get("parameters", {})
+    user_text = query_result.get("queryText", "")
 
     print(f"Action: {action}")
 
