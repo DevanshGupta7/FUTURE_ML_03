@@ -1,6 +1,3 @@
 flask
-torch
 transformers
-accelerate
-sentencepiece
 gunicorn
