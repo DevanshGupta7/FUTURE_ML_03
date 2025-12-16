@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from hf_chatbot import hf_reply
+from chatbot import groq_reply
 from logic import track_order
 import os
 import requests
@@ -22,7 +22,7 @@ def telegram_webhook():
         chat_id = data["message"]["chat"]["id"]
         user_text = data["message"].get("text", "")
 
-        reply = hf_reply(user_text)
+        reply = groq_reply(user_text)
         print(f"Reply form hf_reply: {reply}")
 
         requests.post(
@@ -51,7 +51,7 @@ def webhook():
         reply = track_order(params.get("order_id"))
 
     elif action == "fallback.huggingface":
-        reply = hf_reply(user_text)
+        reply = groq_reply(user_text)
 
     else:
         reply = "How else can I help you?"
