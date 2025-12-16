@@ -1,19 +1,14 @@
-from transformers import pipeline
+from groq import Groq
+import os
 
-chatbot = None
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-def hf_reply(text):
-    global chatbot
-    if chatbot is None:
-        chatbot = pipeline(
-            "text2text-generation",
-            model="facebook/blenderbot-400M-distill"
-        )
-
-    result = chatbot(
-        text,
-        max_length=120,
-        truncatipn=True
+def groq_reply(text):
+    completion = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {"role": "system", "content": "You are a helpful customer support chatbot."},
+            {"role": "user", "content": text}
+        ]
     )
-
-    return result[0]["generated_text"]
+    return completion.choices[0].message.content
