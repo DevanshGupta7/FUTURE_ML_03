@@ -3,3 +3,5 @@ gunicorn
 groq
 python-dotenv
 requests
+google-cloud-dialogflow
+pandas
