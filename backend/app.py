@@ -73,39 +73,44 @@ def telegram_webhook():
         return "OK", 200
 
     except Exception as e:
-        print(f"Error in app.py: {e}")
+        print(f"Error in app.py telegram_webhook: {e}")
         return "Error", 400
  
 @app.route("/webhook", methods=["POST"])
 def webhook():
-    print("Starting webhook")
-    data = request.get_json()
+    try:
+        print("Starting webhook")
+        data = request.get_json()
 
-    print(f"Data from dialogflow: {data}")
+        print(f"Data from dialogflow: {data}")
 
-    query_result = data.get("queryResult", {})
-    action = query_result.get("action", "")
-    params = query_result.get("parameters", {})
-    user_text = query_result.get("queryText", "")
+        query_result = data.get("queryResult", {})
+        action = query_result.get("action", "")
+        params = query_result.get("parameters", {})
+        user_text = query_result.get("queryText", "")
 
-    print(f"Action: {action}")
+        print(f"Action: {action}")
 
-    if action == "track.order.complete":
-        print("Running track.order.complete")
-        reply = track_order(params.get("order_id"))
+        if action == "track.order.complete":
+            print("Running track.order.complete")
+            reply = track_order(params.get("order_id"))
 
-    elif action == "refund.order.start":
-        print("Running refund.order.start")
-        reply = refund_order(params.get("order_id"))
+        elif action == "refund.order.start":
+            print("Running refund.order.start")
+            reply = refund_order(params.get("order_id"))
 
-    elif action == "fallback.huggingface":
-        print("Running fallback.huggingface")
-        reply = groq_reply(user_text)
+        elif action == "fallback.huggingface":
+            print("Running fallback.huggingface")
+            reply = groq_reply(user_text)
 
-    else:
-        reply = "How else can I help you?"
+        else:
+            reply = "How else can I help you?"
 
-    return jsonify({"fulfillmentText": reply})
+        return jsonify({"fulfillmentText": reply})
+
+    except Exception as e:
+        print(f"Error in app.py webhook: {e}")
+        return "Error", 400
 
 @app.route("/health")
 def health():
