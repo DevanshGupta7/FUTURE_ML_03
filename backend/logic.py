@@ -52,6 +52,8 @@ def track_order(order_id):
     category = row["category_name_1"]
     amount = row["grand_total"]
 
+    print(f"Status: {status}")
+
     if "complete" in status:
         return "📦 Delivered Successfully\n\n" + format_response(
             order_id, status, payment, amount, category
@@ -119,6 +121,8 @@ def refund_order(order_id):
     payment = row["payment_method"]
     category = row["category_name_1"]
     amount = row["grand_total"]
+
+    print(f"Status: {status}")
 
     if "complete" in status:
         return (
