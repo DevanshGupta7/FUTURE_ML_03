@@ -86,12 +86,15 @@ def webhook():
     print(f"Action: {action}")
 
     if action == "track.order.complete":
+        print("Running track.order.complete")
         reply = track_order(params.get("order_id"))
 
     elif action == "refund.order.start":
+        print("Running refund.order.start")
         reply = refund_order(params.get("order_id"))
 
     elif action == "fallback.huggingface":
+        print("Running fallback.huggingface")
         reply = groq_reply(user_text)
 
     else:
