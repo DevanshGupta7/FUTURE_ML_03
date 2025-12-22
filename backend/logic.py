@@ -1,8 +1,17 @@
 import pandas as pd
 from random import choice
+import os
 
-df = pd.read_csv("data/Orders_Database.csv", low_memory=True)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_PATH = os.path.join(BASE_DIR, "data", "Orders_Database.csv")
+
+print("CSV PATH:", CSV_PATH)
+print("Files in data:", os.listdir(os.path.join(BASE_DIR, "data")))
+
+df = pd.read_csv(CSV_PATH, low_memory=True)
 df.columns = df.columns.str.lower().str.strip()
+
+print("CSV loaded, rows:", len(df))
 
 REQUIRED_COLUMNS = {
     "item_id",
