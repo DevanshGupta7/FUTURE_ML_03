@@ -4,31 +4,36 @@ from google.cloud import dialogflow_v2
 from google.oauth2 import service_account
 
 def detect_intent(text, session_id="telegram-user"):
-    credentials_info = json.loads(
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
-    )
+    try:
+        credentials_info = json.loads(
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
+        )
 
-    credentials = service_account.Credentials.from_service_account_info(
-        credentials_info
-    )
+        credentials = service_account.Credentials.from_service_account_info(
+            credentials_info
+        )
 
-    session_client = dialogflow_v2.SessionsClient(
-        credentials=credentials
-    )
+        session_client = dialogflow_v2.SessionsClient(
+            credentials=credentials
+        )
 
-    project_id = credentials_info["project_id"]
+        project_id = credentials_info["project_id"]
 
-    session = session_client.session_path(project_id, session_id)
+        session = session_client.session_path(project_id, session_id)
 
-    text_input = dialogflow_v2.TextInput(
-        text=text,
-        language_code="en"
-    )
+        text_input = dialogflow_v2.TextInput(
+            text=text,
+            language_code="en"
+        )
 
-    query_input = dialogflow_v2.QueryInput(text=text_input)
+        query_input = dialogflow_v2.QueryInput(text=text_input)
 
-    response = session_client.detect_intent(
-        request={"session": session, "query_input": query_input}
-    )
+        response = session_client.detect_intent(
+            request={"session": session, "query_input": query_input}
+        )
 
-    return response.query_result
+        return response.query_result
+
+    except Exception as e:
+        print(f"There is an error in dialogflow.py: {e}")
+        return "Error" 
