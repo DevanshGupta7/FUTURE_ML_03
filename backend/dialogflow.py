@@ -1,15 +1,30 @@
-from google.cloud import dialogflow_v2
 import os
+import json
+from google.cloud import dialogflow_v2
+from google.oauth2 import service_account
 
-PROJECT_ID = os.getenv("DIALOGFLOW_PROJECT_ID")
-SESSION_ID = os.getenv("SESSION_ID")
-LANGUAGE_CODE = "en"
+def detect_intent(text, session_id="telegram-user"):
+    credentials_info = json.loads(
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
+    )
 
-def detect_intent(text):
-    session_client = dialogflow_v2.SessionsClient()
-    session = session_client.session_path(PROJECT_ID, SESSION_ID)
+    credentials = service_account.Credentials.from_service_account_info(
+        credentials_info
+    )
 
-    text_input = dialogflow_v2.TextInput(text=text, language_code=LANGUAGE_CODE)
+    session_client = dialogflow_v2.SessionsClient(
+        credentials=credentials
+    )
+
+    project_id = credentials_info["project_id"]
+
+    session = session_client.session_path(project_id, session_id)
+
+    text_input = dialogflow_v2.TextInput(
+        text=text,
+        language_code="en"
+    )
+
     query_input = dialogflow_v2.QueryInput(text=text_input)
 
     response = session_client.detect_intent(
