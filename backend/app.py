@@ -52,12 +52,18 @@ def telegram_webhook():
         print(f"Is fallback: {is_fallback}")
 
         if not is_fallback:
+            print(f"df_result: {df_result}")
             if df_result.fulfillment_text:
+                print("Running df_result.fulfillment_text")
                 reply = df_result.fulfillment_text
             elif df_result.fulfillment_messages:
+                print("Running df_result.fulfillment_messages[0].text.text[0]")
                 reply = df_result.fulfillment_messages[0].text.text[0]
 
+            print(f"Reply from is_fallback: {reply}")
+
         if not reply:
+            print("Running groq_reply")
             reply = groq_reply(user_text)
 
         print(f"Reply from chatbot: {reply}")
