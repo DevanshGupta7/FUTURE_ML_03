@@ -42,6 +42,8 @@ def telegram_webhook():
 
         reply = None
 
+        print(f"user_text: {user_text}")
+
         df_result = detect_intent(user_text)
 
         intent_name = df_result.intent.display_name
@@ -114,6 +116,8 @@ def webhook():
 
         else:
             reply = "How else can I help you?"
+
+        print(f"reply from logic.py: {reply}")
 
         return jsonify({"fulfillmentText": reply})
 

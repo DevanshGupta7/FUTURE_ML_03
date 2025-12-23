@@ -21,16 +21,24 @@ def detect_intent(text, session_id="telegram-user"):
 
         session = session_client.session_path(project_id, session_id)
 
+        print(f"text in dialogflow.py: {text}")
+
         text_input = dialogflow_v2.TextInput(
             text=text,
             language_code="en"
         )
 
+        print(f"text_input: {text_input}")
+
         query_input = dialogflow_v2.QueryInput(text=text_input)
+
+        print(f"query_input: {query_input}")
 
         response = session_client.detect_intent(
             request={"session": session, "query_input": query_input}
         )
+
+        print(f"response from dialogflow.py: {response}")
 
         return response.query_result
 
