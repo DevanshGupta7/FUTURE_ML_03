@@ -1,9 +1,13 @@
 from flask import Flask, request, jsonify
-from dialogflow import detect_intent
-from chatbot import groq_reply
-from logic import track_order, refund_order
+from backend.dialogflow import detect_intent
+from backend.chatbot import groq_reply
+from backend.logic import track_order, refund_order
 import os
 import requests
+from dotenv import load_dotenv
+from backend.handler import handle_user_message
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -125,10 +129,21 @@ def webhook():
         print(f"Error in app.py webhook: {e}")
         return "Error", 400
 
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.get_json()
+    print(f"Data: {data}")
+    user_text = data.get("text")
+
+    if not user_text:
+        return jsonify({"reply": "Please enter a message."})
+
+    reply = handle_user_message(user_text)
+    return jsonify({"reply": reply})
+
 @app.route("/health")
 def health():
     return "OK", 200
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=5000)

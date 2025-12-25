@@ -27,11 +27,11 @@ if missing_cols:
 
 def format_response(order_id, status, payment, amount, category):
     return (
-        f"🧾 Order ID: **{order_id}**\n"
-        f"📌 Status: {status.title()}\n"
-        f"💳 Payment Method: {payment}\n"
-        f"💰 Amount: ₹{amount}\n"
-        f"🛍 Category: {category}"
+        f"🧾 Order ID: **{order_id}**\n\n"
+        f"📌 Status: {status.title()}\n\n"
+        f"💳 Payment Method: {payment}\n\n"
+        f"💰 Amount: ₹{amount}\n\n"
+        f"🛍 Category: {category}\n\n"
     )
 
 def track_order(order_id):
@@ -63,7 +63,7 @@ def track_order(order_id):
         return (
             "❌ Order Cancelled\n\n"
             + format_response(order_id, status, payment, amount, category)
-            + "\n\nIf payment was online, refund will be processed."
+            + "If payment was online, refund will be processed.\n\n"
         )
 
     if "refund" in status:
@@ -98,10 +98,10 @@ def simulated_order_response(order_id) -> str:
     status = status_map[order_id % 4]
 
     return (
-        "⚠️ Order not found in database.\n"
+        "⚠️ Order not found in database.\n\n"
         "Showing simulated response for demo purposes:\n\n"
         + format_response(order_id, status, payment, amount, category)
-        + "\n\n Order ID are in range of 211131 - 905208"
+        + "Order ID are in range of 211131 - 905208\n\n"
     )
 
 def refund_order(order_id):
@@ -128,13 +128,13 @@ def refund_order(order_id):
         return (
             "📦 Delivered Successfully\n\n"
             + format_response(order_id, status, payment, amount, category)
-            + "\n\n🔁 You are eligible to return this product."
-            + "\n💰 Refund will be initiated once return is approved."
-            + "\n⏳ Refund will be credited within 7 working days."
+            + "🔁 You are eligible to return this product."
+            + "\n\n💰 Refund will be initiated once return is approved."
+            + "\n\n⏳ Refund will be credited within 7 working days."
             + (
-                "\n💳 Refund will be credited to the original payment method."
+                "\n\n💳 Refund will be credited to the original payment method."
                 if payment.lower() != "cashatdoorstep"
-                else "\n👛 As this was a cash payment, refund will be added to your wallet balance."
+                else "\n\n👛 As this was a cash payment, refund will be added to your wallet balance.\n\n"
             )
         )
 
@@ -142,11 +142,11 @@ def refund_order(order_id):
         return (
             "❌ Order Cancelled\n\n"
             + format_response(order_id, status, payment, amount, category)
-            + "\n\n🚫 Return is not applicable for cancelled orders."
+            + "🚫 Return is not applicable for cancelled orders."
             + (
-                "\n💰 If payment was online, refund will be processed within 7 working days."
+                "\n\n💰 If payment was online, refund will be processed within 7 working days."
                 if payment.lower() != "cashatdoorstep"
-                else "\n👛 Cash payments will be credited to your wallet balance."
+                else "\n\n👛 Cash payments will be credited to your wallet balance.\n\n"
             )
         )
 
@@ -154,11 +154,11 @@ def refund_order(order_id):
         return (
             "💸 Refund Already in Process\n\n"
             + format_response(order_id, status, payment, amount, category)
-            + "\n\n⏳ Please wait up to 7 working days for the refund to be completed."
+            + "⏳ Please wait up to 7 working days for the refund to be completed."
             + (
-                "\n💳 Refund will be credited to the original payment method."
+                "\n\n💳 Refund will be credited to the original payment method."
                 if payment.lower() != "cashatdoorstep"
-                else "\n👛 Cash refunds will be added to your wallet balance."
+                else "\n\n👛 Cash refunds will be added to your wallet balance.\n\n"
             )
         )
 
@@ -166,12 +166,12 @@ def refund_order(order_id):
         return (
             "🕒 Order Received & Processing\n\n"
             + format_response(order_id, status, payment, amount, category)
-            + "\n\n⚡ Since the order is still at our location, refund will be initiated immediately."
-            + "\n⏳ Amount will be credited within 7 working days."
+            + "⚡ Since the order is still at our location, refund will be initiated immediately."
+            + "\n\n⏳ Amount will be credited within 7 working days."
             + (
-                "\n💳 Refund will be sent to the original payment method."
+                "\n\n💳 Refund will be sent to the original payment method."
                 if payment.lower() != "cashatdoorstep"
-                else "\n👛 Cash payments will be refunded to your wallet balance."
+                else "\n\n👛 Cash payments will be refunded to your wallet balance.\n\n"
             )
         )
 

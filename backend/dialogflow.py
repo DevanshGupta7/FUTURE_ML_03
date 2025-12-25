@@ -1,14 +1,12 @@
-import os
 import json
 from google.cloud import dialogflow_v2
 from google.oauth2 import service_account
 
+with open("backend/credentials/dialogflow_key.json", "r", encoding="utf-8") as f:
+    credentials_info = json.load(f)
+
 def detect_intent(text, session_id="telegram-user"):
     try:
-        credentials_info = json.loads(
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
-        )
-
         credentials = service_account.Credentials.from_service_account_info(
             credentials_info
         )
